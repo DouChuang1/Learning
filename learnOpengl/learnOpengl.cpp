@@ -29,11 +29,10 @@ static void RenderScenceCB() {
 
 	Matrix4f World;
 
-	World.m[0][0] = cosf(Scale); World.m[0][1] = -sinf(Scale); World.m[0][2] = 0.0f; World.m[0][3] = 0.0f;
-	World.m[1][0] = sinf(Scale); World.m[1][1] = cosf(Scale);  World.m[1][2] = 0.0f; World.m[1][3] = 0.0f;
-	World.m[2][0] = 0.0f;        World.m[2][1] = 0.0f;         World.m[2][2] = 1.0f; World.m[2][3] = 0.0f;
-	World.m[3][0] = 0.0f;        World.m[3][1] = 0.0f;         World.m[3][2] = 0.0f; World.m[3][3] = 1.0f;
-
+	World.m[0][0] = sinf(Scale); World.m[0][1] = 0.0f; World.m[0][2] = 0.0f;        World.m[0][3] = 0.0f;
+	World.m[1][0] = 0.0f; World.m[1][1] = sinf(Scale); World.m[1][2] = 0.0f;        World.m[1][3] = 0.0f;
+	World.m[2][0] = 0.0f; ; World.m[2][1] = 0.0f; ; World.m[2][2] = sinf(Scale); World.m[2][3] = 0.0f;
+	World.m[3][0] = 0.0f; ; World.m[3][1] = 0.0f; ; World.m[3][2] = 0.0f;        World.m[3][3] = 1.0f;
 
 	glUniformMatrix4fv(gWorldLocation, 1, GL_TRUE, &World.m[0][0]);
 	// 开启顶点属性
@@ -173,8 +172,21 @@ int main(int argc, char ** argv) {
 	glutInitWindowPosition(100, 100);  // 窗口位置
 	glutCreateWindow("Tutorial 05");   // 窗口标题
 	InitializeGlutCallBack();         // 开始渲染
-									   
+	 const GLubyte* name = glGetString(GL_VENDOR); //返回负责当前OpenGL实现厂商的名字
 
+    const GLubyte* biaoshifu = glGetString(GL_RENDERER); //返回一个渲染器标识符，通常是个硬件平台
+
+    const GLubyte* OpenGLVersion =glGetString(GL_VERSION); //返回当前OpenGL实现的版本号
+
+    const GLubyte* gluVersion= gluGetString(GLU_VERSION); //返回当前GLU工具库版本
+
+    printf("OpenGL实现厂商的名字：%s\n", name);
+
+    printf("渲染器标识符：%s\n", biaoshifu);
+
+    printf("OOpenGL实现的版本号：%s\n",OpenGLVersion );
+
+    printf("OGLU工具库版本：%s\n", gluVersion);
 	// 检查GLEW是否就绪，必须要在GLUT初始化之后！
 	GLenum res = glewInit();
 	if (res != GLEW_OK) {
