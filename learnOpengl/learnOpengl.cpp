@@ -12,7 +12,7 @@
 
 GLuint VBO;
 
-GLuint gScaleLocation; //中间变量链接shader与program
+GLuint gWorldLocation; //中间变量链接shader与program
 //定义着色器程序文件名
 const char* pVSFileName = "shader.vs.txt";
 const char* pFSFileName = "shader.fs.txt";
@@ -27,7 +27,14 @@ static void RenderScenceCB() {
 	static float Scale = 0.0f;
 	Scale += 0.01f;
 
-	glUniform1f(gScaleLocation, cos(Scale));
+	Matrix4f World;
+
+	World.m[0][0] = 1.0f; World.m[0][1] = 0.0f; World.m[0][2] = 0.0f; World.m[0][3] = sinf(Scale);
+	World.m[1][0] = 0.0f; World.m[1][1] = 1.0f; World.m[1][2] = 0.0f; World.m[1][3] = 0.0f;
+	World.m[2][0] = 0.0f; World.m[2][1] = 0.0f; World.m[2][2] = 1.0f; World.m[2][3] = 0.0f;
+	World.m[3][0] = 0.0f; World.m[3][1] = 0.0f; World.m[3][2] = 0.0f; World.m[3][3] = 1.0f;
+
+	glUniformMatrix4fv(gWorldLocation, 1, GL_TRUE, &World.m[0][0]);
 	// 开启顶点属性
 	glEnableVertexAttribArray(0);
 	// 绑定GL_ARRAY_BUFFER缓冲器
@@ -146,8 +153,8 @@ static void CompileShaders()
 
 	glUseProgram(ShaderProgram);
 
-	gScaleLocation = glGetUniformLocation(ShaderProgram, "gScale");
-	assert(gScaleLocation != 0xFFFFFFFF);
+	gWorldLocation = glGetUniformLocation(ShaderProgram, "gWorld");
+	assert(gWorldLocation != 0xFFFFFFFF);
 }
 /**
 * 主函数
